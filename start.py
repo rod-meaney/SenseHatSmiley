@@ -49,21 +49,6 @@ def turn_off():
     ]
     return logo
 
-def menu_logo():
-    B = blue
-    O = nothing
-    logo = [
-    O, O, O, B, B, O, O, O,
-    O, O, B, O, O, B, O, O,
-    O, B, O, O, O, O, B, O,
-    O, O, O, O, O, B, O, O,
-    O, O, O, B, B, O, O, O,
-    O, O, O, B, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, B, O, O, O, O,
-    ]
-    return logo
-
 def happy_logo():
     G = green
     O = nothing
