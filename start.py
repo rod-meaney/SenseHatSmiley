@@ -1,8 +1,10 @@
 import sense_hat
 import time
+from icons import static_icons
 
 s = sense_hat.SenseHat()
 #s.low_light = True
+
 
 state = { "today_happy" : 0,
           "today_sad" : 0,
@@ -23,121 +25,11 @@ menu = [["?", "Explain menu"],
         ["2", "Display smiley totals"],
         ["3", "Reset count"],
         ["4", "Quit"],
-        ["5", "Explain smiley counter"]
+        ["5", "Explain smiley counter"],
+        ["6", "Claire patterns"]
 ]
 
-green = (0, 255, 0)
-yellow = (255, 255, 0)
-blue = (0, 0, 255)
-red = (255, 0, 0)
-white = (255,255,255)
-amber = (255,140,0)
-nothing = (0,0,0)
-pink = (255,105, 180)
-
-def turn_off():
-    O = nothing
-    logo = [
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    ]
-    return logo
-
-def happy_logo():
-    G = green
-    O = nothing
-    logo = [
-    O, O, O, O, O, O, O, O,
-    O, O, G, O, O, G, O, O,
-    O, G, G, O, O, G, G, O,
-    O, O, O, O, O, O, O, O,
-    G, O, O, O, O, O, O, G,
-    O, G, O, O, O, O, G, O,
-    O, O, G, G, G, G, O, O,
-    O, O, O, O, O, O, O, O,
-    ]
-    return logo
-
-def add_happy():
-    G = green
-    O = nothing
-    logo = [
-    O, G, O, O, O, O, O, O,
-    G, G, G, O, O, O, O, O,
-    O, G, O, O, G, O, G, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, G, O, O,
-    O, O, O, G, O, O, O, G,
-    O, O, O, O, G, G, G, O,
-    O, O, O, O, O, O, O, O,
-    ]
-    return logo
-
-def sad_logo():
-    R = red
-    O = nothing
-    logo = [
-    O, O, O, O, O, O, O, O,
-    O, R, O, O, O, O, R, O,
-    O, R, R, O, O, R, R, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, R, R, R, R, O, O,
-    O, R, O, O, O, O, R, O,
-    R, O, O, O, O, O, O, R,
-    ]
-    return logo
-
-def add_sad():
-    R = red
-    O = nothing
-    logo = [
-    O, R, O, O, O, O, O, O,
-    R, R, R, O, O, O, O, O,
-    O, R, O, O, R, O, R, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, R, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, R, R, R, O,
-    O, O, O, R, O, O, O, R,
-    ]
-    return logo
-
-def middle_logo():
-    A = amber
-    O = nothing
-    logo = [
-    O, O, O, O, O, O, O, O,
-    O, A, A, O, O, A, A, O,
-    O, A, A, O, O, A, A, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    O, A, A, A, A, A, A, O,
-    O, O, O, O, O, O, O, O,
-    ]
-    return logo
-
-def add_middle():
-    O = nothing
-    A = amber
-    logo = [
-    O, A, O, O, O, O, O, O,
-    A, A, A, O, O, O, O, O,
-    O, A, O, O, A, O, A, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, O, O, A, O, O,
-    O, O, O, O, O, O, O, O,
-    O, O, O, A, A, A, A, A,
-    O, O, O, O, O, O, O, O,
-    ]
-    return logo
+si = static_icons()
 
 def add_input(input_type):
     state["today_"+input_type] += 1
@@ -164,11 +56,11 @@ def handle_stick_menu(event):
         elif state["menu_item"] == 1:
             state["mode"] = "running"
         elif state["menu_item"] == 2:
-            s.show_message("Happy: %d" % state["today_happy"], text_colour=green)
+            s.show_message("Happy: %d" % state["today_happy"], text_colour=si.green)
             time.sleep(1)
-            s.show_message("Sad: %d" % state["today_sad"], text_colour=red)
+            s.show_message("Sad: %d" % state["today_sad"], text_colour=si.red)
             time.sleep(1)
-            s.show_message("Ambivelant: %d" % state["today_middle"], text_colour=amber)
+            s.show_message("Ambivelant: %d" % state["today_middle"], text_colour=si.amber)
             time.sleep(1)
         elif state["menu_item"] == 3:
             state["today_happy"] = 0
@@ -180,7 +72,16 @@ def handle_stick_menu(event):
             quit()
         elif state["menu_item"] == 5:
             s.show_message("up: add happy, down: add sad, < main menu, > add ambivelant")                                
-        
+        elif state["menu_item"] == 6:
+            s.set_pixels(si.c_heart())
+            time.sleep(2)
+            s.set_pixels(si.c_pink())
+            time.sleep(2)     
+            s.set_pixels(si.c_building())
+            time.sleep(2)
+            s.set_pixels(si.c_scene())
+            time.sleep(2)                                    
+
     elif event.direction == sense_hat.DIRECTION_LEFT:
         s.show_message(menu[state["menu_item"]][1])
 
@@ -189,34 +90,32 @@ def handle_stick_running(event):
         # Ignore releases
         return
     elif event.direction == sense_hat.DIRECTION_UP:
-        s.set_pixels(add_happy())
+        s.set_pixels(si.add_happy())
         add_input("happy")
         time.sleep(state["add_wait_time"])
     elif event.direction == sense_hat.DIRECTION_DOWN:
-        s.set_pixels(add_sad())
+        s.set_pixels(si.add_sad())
         add_input("sad")
         time.sleep(state["add_wait_time"])
     elif event.direction == sense_hat.DIRECTION_RIGHT:
-        s.set_pixels(add_middle())
+        s.set_pixels(si.add_middle())
         add_input("middle")
         time.sleep(state["add_wait_time"])
     elif event.direction == sense_hat.DIRECTION_LEFT:
         state["mode"] = "menu"
         state["menu_item"] = 0
 
-images = [happy_logo, sad_logo, middle_logo]
-count = 0
 keep_going = True
 while keep_going: 
     if state["mode"] == "running":
         if (state["today_happy"] > state["today_sad"]) and (state["today_happy"]>state["today_middle"]):
-            s.set_pixels(happy_logo())
+            s.set_pixels(si.happy_logo())
         elif (state["today_sad"] > state["today_happy"]) and (state["today_sad"]>state["today_middle"]):
-            s.set_pixels(sad_logo())
+            s.set_pixels(si.sad_logo())
         else:
-            s.set_pixels(middle_logo())
+            s.set_pixels(si.middle_logo())
     if state["mode"] == "menu":    
-        s.show_letter(menu[state["menu_item"]][0], text_colour=blue)
+        s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
 
     # Handle one click at a time
     event = s.stick.wait_for_event(emptybuffer=True)
