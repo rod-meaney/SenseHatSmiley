@@ -17,7 +17,9 @@ state = { "today_happy" : 0,
           "month_middle" : 0,
           "add_wait_time": 2,
           "mode":"menu",
-          "menu_item":0
+          "menu_item":0,
+          "write_file":True,
+          "file_location":"../sense_log/sense.log"
 }
 
 menu = [["?", "Explain menu"],
@@ -35,6 +37,9 @@ def add_input(input_type):
     state["today_"+input_type] += 1
     state["week_"+input_type] += 1
     state["month_"+input_type] += 1
+    if state["write_file"]:
+        with open(state["file_location"], "a") as myfile:
+            myfile.write(",\n{'DT':'%s','emotion':'%s'}" % (time.strftime("%Y-%m-%d %H:%M"),input_type))
 
 def handle_stick_menu(event):
     if event.action == sense_hat.ACTION_RELEASED:
