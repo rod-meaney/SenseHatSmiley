@@ -73,7 +73,7 @@ def handle_stick_menu(event):
             state["today_middle"] = 0
             s.show_message("Today reset")
         elif state["menu_item"] == 4:
-            s.set_pixels(turn_off())
+            s.set_pixels(si.turn_off())
             quit()
         elif state["menu_item"] == 5:
             s.show_message("up: add happy, down: add sad, < main menu, > add ambivelant")                                
