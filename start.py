@@ -19,7 +19,9 @@ state = { "today_happy" : 0,
           "mode":"menu",
           "menu_item":0,
           "write_file":True,
-          "file_location":"../sense_log/sense.log"
+          "file_location":"/home/pi/Documents/sense_log/sense.log",
+          "file_location_error":"/home/pi/Documents/sense_log/sense_error.log"
+
 }
 
 menu = [["?", "Explain menu"],
@@ -73,7 +75,11 @@ def handle_stick_menu(event):
             state["today_middle"] = 0
             s.show_message("Today reset")
         elif state["menu_item"] == 4:
-            s.set_pixels(turn_off())
+<<<<<<< HEAD
+            s.show_message("Bye", text_colour=si.pink)
+=======
+>>>>>>> 3c7c2859c038d55ef8232dcb1c315694cbf6c606
+            s.set_pixels(si.turn_off())
             quit()
         elif state["menu_item"] == 5:
             s.show_message("up: add happy, down: add sad, < main menu, > add ambivelant")                                
@@ -112,16 +118,31 @@ def handle_stick_running(event):
 
 keep_going = True
 while keep_going: 
-    if state["mode"] == "running":
-        if (state["today_happy"] > state["today_sad"]) and (state["today_happy"]>state["today_middle"]):
-            s.set_pixels(si.happy_logo())
-        elif (state["today_sad"] > state["today_happy"]) and (state["today_sad"]>state["today_middle"]):
-            s.set_pixels(si.sad_logo())
-        else:
-            s.set_pixels(si.middle_logo())
-    if state["mode"] == "menu":    
-        s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
+    try:
+        if state["mode"] == "running":
+            if (state["today_happy"] > state["today_sad"]) and (state["today_happy"]>state["today_middle"]):
+                s.set_pixels(si.happy_logo())
+            elif (state["today_sad"] > state["today_happy"]) and (state["today_sad"]>state["today_middle"]):
+                s.set_pixels(si.sad_logo())
+            else:
+                s.set_pixels(si.middle_logo())
+        if state["mode"] == "menu":    
+            s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
 
+        # Handle one click at a time
+        event = s.stick.wait_for_event(emptybuffer=True)
+        
+        #for event in s.stick.get_events():
+        if state["mode"] == "running":
+            handle_stick_running(event)
+        elif state["mode"] == "menu":
+            handle_stick_menu(event)
+    except Exception as e:     # most generic exception you can catch
+        with open(state["file_location_error"], "a") as myfile:
+            myfile.write("Failed to download {0}: {1}\n".format(str(download), str(e)))
+
+<<<<<<< HEAD
+=======
     # Handle one click at a time
     event = s.stick.wait_for_event(emptybuffer=True)
     
@@ -130,3 +151,4 @@ while keep_going:
         handle_stick_running(event)
     elif state["mode"] == "menu":
         handle_stick_menu(event)
+>>>>>>> 3c7c2859c038d55ef8232dcb1c315694cbf6c606
