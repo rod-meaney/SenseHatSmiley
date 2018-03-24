@@ -1,5 +1,7 @@
 import sense_hat
 import time
+import os
+from shutil import copyfile
 from icons import static_icons
 
 s = sense_hat.SenseHat()
@@ -30,7 +32,8 @@ menu = [["?", "Explain menu"],
         ["3", "Reset count"],
         ["4", "Quit"],
         ["5", "Explain smiley counter"],
-        ["6", "Claire patterns"]
+        ["6", "Claire patterns"],
+        ["7", "Copy Log"]
 ]
 
 si = static_icons()
@@ -75,10 +78,7 @@ def handle_stick_menu(event):
             state["today_middle"] = 0
             s.show_message("Today reset")
         elif state["menu_item"] == 4:
-<<<<<<< HEAD
             s.show_message("Bye", text_colour=si.pink)
-=======
->>>>>>> 3c7c2859c038d55ef8232dcb1c315694cbf6c606
             s.set_pixels(si.turn_off())
             quit()
         elif state["menu_item"] == 5:
@@ -92,6 +92,24 @@ def handle_stick_menu(event):
             time.sleep(2)
             s.set_pixels(si.c_scene())
             time.sleep(2)                                    
+        elif state["menu_item"] == 7:
+            directory = '/media/pi/'
+            complete = False
+            try:
+                for file in os.listdir(directory):
+                    if file != 'SETTINGS':
+                        new_file="%s/sense.log"%(os.path.join(directory, file))
+                        copyfile(state["file_location"],new_file)
+                        complete = True
+            except e:
+                complete = False
+
+            if complete == True:
+                s.show_message("P", text_colour=si.green)
+                time.sleep(1)
+            else:
+                s.show_message("F", text_colour=si.red)
+                time.sleep(1)
 
     elif event.direction == sense_hat.DIRECTION_LEFT:
         s.show_message(menu[state["menu_item"]][1])
@@ -140,15 +158,3 @@ while keep_going:
     except Exception as e:     # most generic exception you can catch
         with open(state["file_location_error"], "a") as myfile:
             myfile.write("Failed to download {0}: {1}\n".format(str(download), str(e)))
-
-<<<<<<< HEAD
-=======
-    # Handle one click at a time
-    event = s.stick.wait_for_event(emptybuffer=True)
-    
-    #for event in s.stick.get_events():
-    if state["mode"] == "running":
-        handle_stick_running(event)
-    elif state["mode"] == "menu":
-        handle_stick_menu(event)
->>>>>>> 3c7c2859c038d55ef8232dcb1c315694cbf6c606
