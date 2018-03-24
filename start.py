@@ -78,10 +78,7 @@ def handle_stick_menu(event):
             state["today_middle"] = 0
             s.show_message("Today reset")
         elif state["menu_item"] == 4:
-<<<<<<< HEAD
             s.show_message("Bye", text_colour=si.pink)
-=======
->>>>>>> 3c7c2859c038d55ef8232dcb1c315694cbf6c606
             s.set_pixels(si.turn_off())
             quit()
         elif state["menu_item"] == 5:
@@ -150,7 +147,6 @@ while keep_going:
         if state["mode"] == "menu":    
             s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
 
-<<<<<<< HEAD
         # Handle one click at a time
         event = s.stick.wait_for_event(emptybuffer=True)
         
@@ -162,13 +158,3 @@ while keep_going:
     except Exception as e:     # most generic exception you can catch
         with open(state["file_location_error"], "a") as myfile:
             myfile.write("Failed to download {0}: {1}\n".format(str(download), str(e)))
-=======
-    # Handle one click at a time
-    event = s.stick.wait_for_event(emptybuffer=True)
-    
-    #for event in s.stick.get_events():
-    if state["mode"] == "running":
-        handle_stick_running(event)
-    elif state["mode"] == "menu":
-        handle_stick_menu(event)
->>>>>>> 3c7c2859c038d55ef8232dcb1c315694cbf6c606
