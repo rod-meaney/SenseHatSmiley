@@ -11,29 +11,24 @@ s = sense_hat.SenseHat()
 state = { "today_happy" : 0,
           "today_sad" : 0,
           "today_middle" : 0,
-          "week_happy" : 0,
-          "week_sad" : 0,
-          "week_middle" : 0,
-          "month_happy" : 0,
-          "month_sad" : 0,
-          "month_middle" : 0,
           "add_wait_time": 2,
           "mode":"menu",
           "menu_item":0,
           "write_file":True,
           "file_location":"/home/pi/Documents/sense_log/sense.log",
           "file_location_error":"/home/pi/Documents/sense_log/sense_error.log"
-
 }
 
 menu = [["?", "Explain menu"],
-        ["1", "Run smiley counter"],
-        ["2", "Display smiley totals"],
+        ["1", "Display mode face"],
+        ["2", "Show smiley totals"],
         ["3", "Reset count"],
         ["4", "Quit"],
         ["5", "Explain smiley counter"],
         ["6", "Claire patterns"],
-        ["7", "Copy Log"]
+        ["7", "Display mode bar graph"],
+        ["8", "Display mode mixed"],
+        ["9", "Copy Log"]
 ]
 
 si = static_icons()
@@ -64,13 +59,13 @@ def handle_stick_menu(event):
         if state["menu_item"] == 0:
             s.show_message("up: Menu item up, down: Menu item Down, < Describe menu item, > Activate menu item")
         elif state["menu_item"] == 1:
-            state["mode"] = "running"
+            state["mode"] = "running - face"
         elif state["menu_item"] == 2:
             s.show_message("Happy: %d" % state["today_happy"], text_colour=si.green)
             time.sleep(1)
             s.show_message("Sad: %d" % state["today_sad"], text_colour=si.red)
             time.sleep(1)
-            s.show_message("Ambivelant: %d" % state["today_middle"], text_colour=si.amber)
+            s.show_message("Meh: %d" % state["today_middle"], text_colour=si.amber)
             time.sleep(1)
         elif state["menu_item"] == 3:
             state["today_happy"] = 0
@@ -93,6 +88,10 @@ def handle_stick_menu(event):
             s.set_pixels(si.c_scene())
             time.sleep(2)                                    
         elif state["menu_item"] == 7:
+            state["mode"] = "running - bar"
+        elif state["menu_item"] == 8:
+            state["mode"] = "running - dual"
+        elif state["menu_item"] == 9:
             directory = '/media/pi/'
             complete = False
             try:
@@ -109,7 +108,7 @@ def handle_stick_menu(event):
                 time.sleep(1)
             else:
                 s.show_message("F", text_colour=si.red)
-                time.sleep(1)
+                time.sleep(1)            
 
     elif event.direction == sense_hat.DIRECTION_LEFT:
         s.show_message(menu[state["menu_item"]][1])
@@ -134,16 +133,26 @@ def handle_stick_running(event):
         state["mode"] = "menu"
         state["menu_item"] = 0
 
+def displayface():
+    if (state["today_happy"] > state["today_sad"]) and (state["today_happy"]>state["today_middle"]):
+        s.set_pixels(si.happy_logo())
+    elif (state["today_sad"] > state["today_happy"]) and (state["today_sad"]>state["today_middle"]):
+        s.set_pixels(si.sad_logo())
+    else:
+        s.set_pixels(si.middle_logo())
+
 keep_going = True
 while keep_going: 
     try:
-        if state["mode"] == "running":
-            if (state["today_happy"] > state["today_sad"]) and (state["today_happy"]>state["today_middle"]):
-                s.set_pixels(si.happy_logo())
-            elif (state["today_sad"] > state["today_happy"]) and (state["today_sad"]>state["today_middle"]):
-                s.set_pixels(si.sad_logo())
+        if state["mode"] == "running - face":
+            displayface()
+        if state["mode"] == "running - bar":
+            s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
+        if state["mode"] == "running - dual":
+            if ((time.time() % 60)>50):
+                s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
             else:
-                s.set_pixels(si.middle_logo())
+                displayface()
         if state["mode"] == "menu":    
             s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
 
@@ -151,7 +160,7 @@ while keep_going:
         event = s.stick.wait_for_event(emptybuffer=True)
         
         #for event in s.stick.get_events():
-        if state["mode"] == "running":
+        if state["mode"].startswith("running"):
             handle_stick_running(event)
         elif state["mode"] == "menu":
             handle_stick_menu(event)
