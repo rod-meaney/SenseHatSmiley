@@ -1,3 +1,4 @@
+import math
 class static_icons:
     green = (0, 255, 0)
     light_green = (198,247,51)
