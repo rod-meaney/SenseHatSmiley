@@ -185,7 +185,7 @@ class static_icons:
         ]
         return logo
 
-    def bar_graph(r,y,g):
+    def bar_graph(self,r,y,g):
         G = (0, 255, 0)
         Y = (255, 255, 0)
         R = (255, 0, 0)
