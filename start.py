@@ -15,8 +15,8 @@ state = { "today_happy" : 0,
           "mode":"menu",
           "menu_item":0,
           "write_file":True,
-          "file_location":"/home/pi/Documents/sense_log/sense.log",
-          "file_location_error":"/home/pi/Documents/sense_log/sense_error.log"
+          "file_location":"/home/pi/Documents/sense_logTest/sense.log",
+          "file_location_error":"/home/pi/Documents/sense_logTest/sense_error.log"
 }
 
 menu = [["?", "Explain menu"],
@@ -27,7 +27,7 @@ menu = [["?", "Explain menu"],
         ["5", "Explain smiley counter"],
         ["6", "Claire patterns"],
         ["7", "Display mode bar graph"],
-        ["8", "Display mode mixed"],
+        #["8", "Display mode mixed"],
         ["9", "Copy Log"]
 ]
 
@@ -35,8 +35,6 @@ si = static_icons()
 
 def add_input(input_type):
     state["today_"+input_type] += 1
-    state["week_"+input_type] += 1
-    state["month_"+input_type] += 1
     if state["write_file"]:
         with open(state["file_location"], "a") as myfile:
             myfile.write(",\n{'DT':'%s','emotion':'%s'}" % (time.strftime("%Y-%m-%d %H:%M"),input_type))
@@ -144,12 +142,13 @@ def displayface():
 keep_going = True
 while keep_going: 
     try:
+        print(state["mode"])
         if state["mode"] == "running - face":
             displayface()
         if state["mode"] == "running - bar":
             s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
         if state["mode"] == "running - dual":
-            if ((time.time() % 60)>50):
+            if ((time.time() % 60)>30):
                 s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
             else:
                 displayface()
