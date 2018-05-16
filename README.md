@@ -1,0 +1,7 @@
+# SenseHatSmiley
+Code for having a smiley face indicator using sense hat
+When testing in the simulator at https://trinket.io/sense-hat
+1. You can add the icons.py as a new file as well as main.py
+2. The emulator doesn't support writing to files so
+2a. Change the write_file value in state to False
+2b. REM out #from shutil import copyfile
