@@ -192,11 +192,11 @@ class static_icons:
         N = (0,0,0)
 
         lista = [r,y,g]
-        div = (math.trunc(max(lista)/16)+1)*16 #Largest divisor of 16
+        div = (math.trunc(max(lista)/16)+1) #Largest divisor of 16
 
-        r=int(round((r*16)/div)) 
-        y=int(round((y*16)/div))
-        g=int(round((g*16)/div))
+        r=int(round((r)/div)) 
+        y=int(round((y)/div))
+        g=int(round((g)/div))
 
         display = []
         sad=[57,56,49,48,41,40,33,32,25,24,17,16,9,8,1,0]

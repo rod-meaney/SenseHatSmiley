@@ -7,7 +7,6 @@ from icons import static_icons
 s = sense_hat.SenseHat()
 #s.low_light = True
 
-
 state = { "today_happy" : 0,
           "today_sad" : 0,
           "today_middle" : 0,
@@ -15,8 +14,8 @@ state = { "today_happy" : 0,
           "mode":"menu",
           "menu_item":0,
           "write_file":True,
-          "file_location":"/home/pi/Documents/sense_logTest/sense.log",
-          "file_location_error":"/home/pi/Documents/sense_logTest/sense_error.log"
+          "file_location":"/home/pi/Documents/sense_log/sense.log",
+          "file_location_error":"/home/pi/Documents/sense_log/sense_error.log"
 }
 
 menu = [["?", "Explain menu"],
@@ -27,7 +26,7 @@ menu = [["?", "Explain menu"],
         ["5", "Explain smiley counter"],
         ["6", "Claire patterns"],
         ["7", "Display mode bar graph"],
-        #["8", "Display mode mixed"],
+        ["8", "Display mode mixed"],
         ["9", "Copy Log"]
 ]
 
@@ -84,7 +83,7 @@ def handle_stick_menu(event):
             s.set_pixels(si.c_building())
             time.sleep(2)
             s.set_pixels(si.c_scene())
-            time.sleep(2)                                    
+            time.sleep(2)
         elif state["menu_item"] == 7:
             state["mode"] = "running - bar"
         elif state["menu_item"] == 8:
@@ -142,16 +141,15 @@ def displayface():
 keep_going = True
 while keep_going: 
     try:
-        print(state["mode"])
         if state["mode"] == "running - face":
             displayface()
         if state["mode"] == "running - bar":
             s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
         if state["mode"] == "running - dual":
-            if ((time.time() % 60)>30):
-                s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
-            else:
-                displayface()
+            s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
+            time.sleep(2)
+            displayface()
+                
         if state["mode"] == "menu":    
             s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
 
@@ -164,5 +162,4 @@ while keep_going:
         elif state["mode"] == "menu":
             handle_stick_menu(event)
     except Exception as e:     # most generic exception you can catch
-        with open(state["file_location_error"], "a") as myfile:
-            myfile.write("Failed to download {0}: {1}\n".format(str(download), str(e)))
+        print str(e)
