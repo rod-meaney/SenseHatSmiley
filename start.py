@@ -11,6 +11,7 @@ state = { "today_happy" : 0,
           "today_sad" : 0,
           "today_middle" : 0,
           "add_wait_time": 2,
+          "dual_mode_graph_wait": 10,
           "mode":"menu",
           "menu_item":0,
           "write_file":True,
@@ -147,7 +148,7 @@ while keep_going:
             s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
         if state["mode"] == "running - dual":
             s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
-            time.sleep(2)
+            time.sleep(state["dual_mode_graph_wait"])
             displayface()
                 
         if state["mode"] == "menu":    
