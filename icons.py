@@ -110,6 +110,21 @@ class static_icons:
         ]
         return logo
 
+    def happy_less_logo(self):
+        G = self.green
+        O = self.nothing
+        logo = [
+        O, O, O, O, O, O, O, O,
+        O, G, G, O, O, G, G, O,
+        O, G, G, O, O, G, G, O,
+        O, O, O, O, O, O, O, O,
+        O, O, O, O, O, O, O, O,
+        O, O, O, O, O, O, O, O,
+        O, G, G, G, G, G, G, O,
+        O, O, O, O, O, O, O, O,
+        ]
+        return logo
+
     def add_happy(self):
         G = self.green
         O = self.nothing
@@ -136,6 +151,21 @@ class static_icons:
         O, O, O, O, O, O, O, O,
         O, O, R, R, R, R, O, O,
         O, R, O, O, O, O, R, O,
+        O, O, O, O, O, O, O, O,
+        ]
+        return logo
+
+    def sad_less_logo(self):
+        R = self.red
+        O = self.nothing
+        logo = [
+        O, O, O, O, O, O, O, O,
+        O, R, O, O, O, O, R, O,
+        O, R, R, O, O, R, R, O,
+        O, O, O, O, O, O, O, O,
+        O, O, O, O, O, O, O, O,
+        O, O, O, O, O, O, O, O,
+        O, R, R, R, R, R, R, O,
         O, O, O, O, O, O, O, O,
         ]
         return logo

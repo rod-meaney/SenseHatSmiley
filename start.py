@@ -12,6 +12,8 @@ state = { "today_happy" : 0,
           "today_middle" : 0,
           "add_wait_time": 2,
           "dual_mode_graph_wait": 10,
+          "hidden_mode_rotate_time": 0.5,
+          "hidden_mode_rotate_fn": 0,
           "mode":"menu",
           "menu_item":0,
           "write_file":True,
@@ -27,8 +29,8 @@ menu = [["?", "Explain menu"],
         ["5", "Explain smiley counter"],
         ["6", "Claire patterns"],
         ["7", "Display mode bar graph"],
-        ["8", "Display mode mixed"],
-        ["9", "Copy Log"]
+        ["8", "Display mode hidden"],
+        ["9", "Copy Log"],
 ]
 
 si = static_icons()
@@ -88,7 +90,7 @@ def handle_stick_menu(event):
         elif state["menu_item"] == 7:
             state["mode"] = "running - bar"
         elif state["menu_item"] == 8:
-            state["mode"] = "running - dual"
+            state["mode"] = "running - hidden"
         elif state["menu_item"] == 9:
             directory = '/media/pi/'
             complete = False
@@ -139,28 +141,48 @@ def displayface():
     else:
         s.set_pixels(si.middle_logo())
 
+def displayface_rotate():
+    fns = ['happy_less_logo', 'happy_logo', 'happy_less_logo', 'middle_logo', 'sad_less_logo', 'sad_logo', 'sad_less_logo', 'middle_logo']
+    s.set_pixels(getattr(si, fns[state["hidden_mode_rotate_fn"]])())
+    time.sleep(state["hidden_mode_rotate_time"])
+    if state["hidden_mode_rotate_fn"] == len(fns)-1:
+        state["hidden_mode_rotate_fn"]=0
+    else:
+        state["hidden_mode_rotate_fn"] = state["hidden_mode_rotate_fn"] + 1
+
 keep_going = True
+time_pressed = time.time()
 while keep_going: 
     try:
         if state["mode"] == "running - face":
             displayface()
+        if state["mode"] == "running - hidden":
+            displayface_rotate()
         if state["mode"] == "running - bar":
             s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
-        if state["mode"] == "running - dual":
-            s.set_pixels(si.bar_graph(state["today_sad"],state["today_middle"],state["today_happy"]))
-            time.sleep(state["dual_mode_graph_wait"])
-            displayface()
-                
         if state["mode"] == "menu":    
-            s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)
+            s.show_letter(menu[state["menu_item"]][0], text_colour=si.blue)            
 
-        # Handle one click at a time
-        event = s.stick.wait_for_event(emptybuffer=True)
+        #Handle click at any time
+        events = s.stick.get_events()
+        if events:
+            for event in events:
+                if state["mode"].startswith("running"):
+                    if (time.time() - time_pressed) > state["add_wait_time"]:
+                        time_pressed = time.time()
+                        handle_stick_running(event)
+                elif state["mode"] == "menu":
+                    handle_stick_menu(event)
+        else:
+            moved = False
+    
+    #     # Handle one click at a time
+    #     event = s.stick.wait_for_event(emptybuffer=True)
         
-        #for event in s.stick.get_events():
-        if state["mode"].startswith("running"):
-            handle_stick_running(event)
-        elif state["mode"] == "menu":
-            handle_stick_menu(event)
+    #     #for event in s.stick.get_events():
+    #     if state["mode"].startswith("running"):
+    #         handle_stick_running(event)
+    #     elif state["mode"] == "menu":
+    #         handle_stick_menu(event)
     except Exception as e:     # most generic exception you can catch
         print str(e)
