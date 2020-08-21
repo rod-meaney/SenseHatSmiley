@@ -6,7 +6,7 @@ class static_icons:
     blue = (0, 0, 255)
     bright_blue = (111,225,226)
     red = (255, 0, 0)
-    light_red = (256, 111, 111)
+    light_red = (255, 111, 111)
     white = (255,255,255)
     amber = (255,140,0)
     nothing = (0,0,0)
@@ -26,6 +26,38 @@ class static_icons:
         O, O, O, O, O, O, O, O,
         O, O, O, O, O, O, O, O,
         O, O, O, O, O, O, O, O,
+        ]
+        return logo
+
+    def bin(self):
+        O = self.nothing
+        B = self.blue
+        logo = [
+        O, B, B, B, B, B, B, O,
+        B, B, O, O, O, O, B, B,
+        O, B, O, B, B, O, B, O,
+        O, B, O, B, B, O, B, O,
+        O, B, O, B, B, O, B, O,
+        O, B, O, B, B, O, B, O,
+        O, O, B, O, O, B, O, O,
+        O, O, B, B, B, B, O, O,
+        ]
+        return logo
+
+    def phone(self):
+        O = self.nothing
+        R = self.red
+        L = self.light_red
+        W = self.white
+        logo = [
+        O, O, O, O, O, O, O, O,
+        O, L, L, L, L, L, L, O,
+        L, L, L, L, L, L, L, L,
+        L, L, W, W, W, W, L, L,
+        L, L, W, R, R, W, L, L,
+        O, W, W, R, R, W, W, O,
+        R, R, R, R, R, R, R, R,
+        R, R, R, R, R, R, R, R,
         ]
         return logo
 

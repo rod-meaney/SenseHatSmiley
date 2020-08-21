@@ -79,7 +79,13 @@ def handle_stick(event):
 keep_going = True
 while keep_going: 
   try:
-    s.set_pixels(getattr(si, state["current"])())
+    parts = state["current"].split(" ")
+    s.set_pixels(getattr(si, parts[0])())
+    if len(parts) > 1:
+      if parts[1] == "flash":
+        time.sleep(.5)
+        s.set_pixels(getattr(si, "turn_off")())
+        time.sleep(.5)
     #Handle click at any time
     events = s.stick.get_events()
     if events:
